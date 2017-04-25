@@ -20,7 +20,7 @@ Open your Browser and goto to
 `http://localhost:8081/page?url=(URL Page Ganool)`  
 
 ## Example Result Page
-```json
+```javascript
 [{
     "title": "Rings (2017) BluRay 720p 900MB Goody.to",
     "poster": "https://goody.to/wp-content/uploads/2017/04/Rings-2017-Bluray-258x323.jpg?v=1",
