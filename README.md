@@ -17,6 +17,8 @@ You will see
 Open your Browser and goto to 
 `http://localhost:8081/get?url=(URL Ganool)`
 
+`http://localhost:8081/page?url=(URL Page Ganool)`
+
 ## Example Result Page
 ```json
 [{
