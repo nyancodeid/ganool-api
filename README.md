@@ -14,10 +14,10 @@ Start Node
 You will see 
 `Ganool-API Run in Port 8081`
 
-Open your Browser and goto to 
-`http://localhost:8081/get?url=(URL Ganool)`
+Open your Browser and goto to  
+`http://localhost:8081/get?url=(URL Ganool)`  
 
-`http://localhost:8081/page?url=(URL Page Ganool)`
+`http://localhost:8081/page?url=(URL Page Ganool)`  
 
 ## Example Result Page
 ```json
