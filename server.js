@@ -5,12 +5,12 @@ var cheerio = require('cheerio');
 var app 	= express();
 
 app.get('/get', function(req, res){
-	console.log("accept request");
+	console.log("accept request => get");
 	url = req.query.url;
 
 	request(url, function(error, response, html) {
 		console.log("requested => " + url);
-
+		
 		if (!error) {
 			var $ = cheerio.load(html);
 
@@ -72,13 +72,104 @@ app.get('/get', function(req, res){
 
 			});
 
-			res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify(json, null, 3));
+			res.json(json);
+		} else {
+			res.writeHead(500);
+			res.write("Internal Server Error");
 
+			res.end();
 		}
 
 	});
+});
 
+app.get('/page', function(req, res) {
+	console.log("accept request => /page");
+
+	url = req.query.url;
+	request(url, function(error, response, html) {
+		console.log("requested => " + url);
+
+		if (!error) {
+			var $ = cheerio.load(html);
+
+			var title, poster, imdbRating, releaseDate, duration, quality, language, size, encoder, genres, actors, director, country, screenshot, synopsis, linkDownloads;
+			var json = [];
+
+			var posts = $("#singlepostpage");
+
+			title 	= posts.find(".movie_infos > h1").text().replace(/\t/g, "").replace(/\n/g, "").replace(/\r/g, "");
+			poster	= posts.find(".poster_post img").attr("src");
+			imdbRating = posts.find("span > button.btn-warning > strong").text();
+			releaseDate = posts.find(".movie_infos > span:nth-child(5) > button").text();
+			duration = posts.find(".movie_infos > span:nth-child(6) > button").text();
+			quality = posts.find('p[itemprop="moviequality"]').text().replace("Quality: ", "");
+			size = posts.find('p[itemprop="moviesize"]').text().replace("Movie Size : ", "");
+			language = posts.find('p[itemprop="movielanguage"]').text().replace("Language : ", "");
+			genres = posts.find('p[itemprop="genre"]').text().replace("Genre : ", "").replace(/\t/g, "").replace(/\n/g, "").replace(/\r/g, "").replace(/, /g, ",");
+			director = posts.find('p[itemprop="director"]').text().replace("Director: ", "").replace(/\t/g, "").replace(/\n/g, "").replace(/\r/g, "").replace(/, /g, ",");
+			actors = posts.find('p[itemprop="actors"]').text().replace("Actors:  \r", "").replace(/\t/g, "").replace(/\n/g, "").replace(/, /g, ",");
+			country = posts.find('p[itemprop="country"]').text().replace("Country : ", "");
+			synopsis = posts.find('dd[itemprop="desc"] p').text();
+
+			type = title.match(/ (Episode (\d{2,4})-(\d{2,4})) /g);
+			if (type == null) {
+
+			} else {
+				linkDownloads = [];
+				listEpisode = [];
+				iseng = [];
+				items = posts.find(".mymorequality p").nextUntil("hr", "div");
+
+				posts.find(".mymorequality p").each(function(i, elem) {
+					linkDownloads.push({
+						title: $(elem).text().replace(/\t/g, "").replace(/\n/g, "").replace(/\r/g, ""),
+						links: []
+					});
+					$(elem).nextUntil("hr", "div").each(function() {
+						linkDownloads[i].links.push($(this).find("a").text());
+					});
+				});
+			}
+
+			json.push({
+				"title": title,
+				"poster": poster,
+				"quality": quality,
+				"detail": {
+					"imdbRating": imdbRating,
+					"releaseDate": releaseDate,
+					"duration": duration,
+					"size": size,
+					"language": language
+				},
+				"country":country,
+				"actors": actors.split(','),
+				"genre": genres.split(','),
+				"director":director,
+				"synopsis": synopsis,
+				"downloads":linkDownloads
+			});
+		}
+
+		res.json(json);
+	});
+});
+
+app.get('/demo/list', function(req, res) {
+	console.log("get demo");
+	res.writeHead(200, {'Content-Type': 'text/html'});
+
+	fs.readFile('./demo/list.html', null, function(error, data) {
+		if (error) {
+			res.writeHead(404);
+			res.write("File Not Found");
+		} else {
+			res.write(data);
+		}
+
+		res.end();
+	});
 });
 
 app.listen('8081');

@@ -7,10 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "dependencies" : {
-    "express"    : "latest",
-    "request"    : "latest",
-    "cheerio"    : "latest"
+  "dependencies": {
+    "cheerio": "latest",
+    "express": "latest",
+    "nodemon": "^1.11.0",
+    "request": "latest"
   },
   "author": "Ryan Aunur Rassyid",
   "license": "MIT"
