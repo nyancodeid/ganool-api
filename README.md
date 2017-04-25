@@ -2,16 +2,16 @@
 Ganool API with NodeJS Server. Only Support Get List of Movie
 
 ## Using
-Clone this Repository with
+Clone this Repository with  
 `git clone https://github.com/nyancodeid/ganool-api.git`
 
-Run
+Run  
 `npm install`
 
-Start Node
+Start Node  
 `npm start`
 
-You will see 
+You will see  
 `Ganool-API Run in Port 8081`
 
 Open your Browser and goto to  
