@@ -114,7 +114,18 @@ app.get('/page', function(req, res) {
 
 			type = title.match(/ (Episode (\d{2,4})-(\d{2,4})) /g);
 			if (type == null) {
+				linkDownloads = [];
 
+				posts.find("#customtables > table tr").each(function() {
+					linkDownloads.push({
+						title: $(this).find("> td:first-child").text(),
+						link: $(this).find("> td:last-child a").text()
+					});
+					console.log($(this).find("> td:first-child").text());
+				});
+
+
+				
 			} else {
 				linkDownloads = [];
 				listEpisode = [];
@@ -147,8 +158,8 @@ app.get('/page', function(req, res) {
 				"actors": actors.split(','),
 				"genre": genres.split(','),
 				"director":director,
+				"downloads": linkDownloads,
 				"synopsis": synopsis,
-				"downloads":linkDownloads
 			});
 		}
 
